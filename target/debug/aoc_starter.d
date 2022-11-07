@@ -1,0 +1,1 @@
+/Users/lindakat/Documents/PersonalProjects/aoc-22/target/debug/aoc_starter: /Users/lindakat/Documents/PersonalProjects/aoc-22/aoc_starter/src/lib.rs /Users/lindakat/Documents/PersonalProjects/aoc-22/aoc_starter/src/main.rs
