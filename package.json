@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "setup": "cargo run",
-    "check": "ts-node-esm solutions/day01.js"
+    "check": "ts-node-esm solutions/day02.js"
   },
   "repository": {
     "type": "git",
