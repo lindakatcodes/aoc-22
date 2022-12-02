@@ -16,6 +16,7 @@ for (let i = 0; i < meals.length; i++) {
   }
 }
 
+// part 1
 console.log(maxCals);
 
 function compareFn(a, b) {
