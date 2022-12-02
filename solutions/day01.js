@@ -1,6 +1,6 @@
-const fs = require('fs');
+import * as h from '../utils/helpers.ts';
 
-const data = fs.readFileSync('../inputs/day01input.txt').toString();
+const data = await h.readData('./inputs/day01input.txt');
 const meals = data.split("\n\n").map((set) => set.split('\n').map((meal) => Number(meal)));
 
 let maxCals = 0;

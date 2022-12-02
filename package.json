@@ -2,25 +2,23 @@
   "name": "aoc-22",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "setup": "cargo run"
+    "setup": "cargo run",
+    "check": "ts-node-esm solutions/day01.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lindakatcodes/aoc-22.git"
   },
-  "author": "",
+  "author": "Linda Thompson",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/lindakatcodes/aoc-22/issues"
-  },
   "homepage": "https://github.com/lindakatcodes/aoc-22#readme",
+  "type": "module",
   "devDependencies": {
     "@types/node": "^18.11.9",
     "eslint": "^8.27.0",
     "eslint-plugin-import": "^2.26.0",
-    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
     "typescript": "^4.8.4"
   }
 }

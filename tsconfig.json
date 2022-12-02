@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "useDefineForClassFields": true,
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "strict": true,
-    "jsx": "preserve",
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"]
+    "outDir": "out",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["solutions", "utils/helpers.ts"],
+  "ts-node": {
+    "transpileOnly": true
   }
 }
