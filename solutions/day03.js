@@ -31,23 +31,29 @@ function findItem(sack) {
   return item;
 }
 
+function getPriority(items) {
+  const counts = [];
+  items.map((item) => {
+    let index = 0;
+    
+    const lower = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    if (lower.includes(item)) {
+      index = lower.indexOf(item) + 1;
+    } else {
+      index = upper.indexOf(item) + 27;
+    }
+    counts.push(index);
+  })
+  return counts;
+}
+
 allSacks.forEach((sack) => {
   const rebel = findItem(sack);
   items.push(rebel);
 })
 
-const priorities = items.map((item) => {
-  let index = 0;
-  
-  const lower = 'abcdefghijklmnopqrstuvwxyz'.split('');
-  const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  if (lower.includes(item)) {
-    index = lower.indexOf(item) + 1;
-  } else {
-    index = upper.indexOf(item) + 27;
-  }
-  return index;
-})
+const priorities = getPriority(items);
 const sum = priorities.reduce((total, value) => total + value, 0)
 // part 1 answer
 console.log(sum)
@@ -77,18 +83,7 @@ for (let i = 0; i < allSacks.length; i++) {
   i += 2;
 }
 
-const priorities2 = items2.map((item) => {
-  let index = 0;
-  
-  const lower = 'abcdefghijklmnopqrstuvwxyz'.split('');
-  const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  if (lower.includes(item)) {
-    index = lower.indexOf(item) + 1;
-  } else {
-    index = upper.indexOf(item) + 27;
-  }
-  return index;
-})
+const priorities2 = getPriority(items2);
 
 const sum2 = priorities2.reduce((total, value) => total + value, 0)
 console.log(sum2)
