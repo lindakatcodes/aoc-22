@@ -85,7 +85,7 @@ pub fn create_files(config: Config) -> () {
     );
 
     // write the boilerplate data to our file - import needed files and packages, and write the call to read in the input file if it exists
-    let mut data_to_write: String = "import * as h from '../utils/helpers';\r\n\r\n".to_string();
+    let mut data_to_write: String = "import * as h from '../utils/helpers.ts';\r\n\r\n".to_string();
     if config.puzzle_input {
         let input_data = format!(
             "{}{}{}",
