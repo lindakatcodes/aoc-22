@@ -38,25 +38,31 @@ const steps = strInput(splitData[1]).map((step) => {
 });
 
 // part 1
-// const stacks = {...originalStacks};
+const stacks = {};
+numCrates.forEach((stack) => {
+  stacks[stack] = [...originalStacks[stack]];
+})
 
-// for (let i = 0; i < steps.length; i++) {
-//   const move = steps[i];
-//   const qty = move[1];
-//   const from = move[3];
-//   const to = move[5];
+for (let i = 0; i < steps.length; i++) {
+  const move = steps[i];
+  const qty = move[1];
+  const from = move[3];
+  const to = move[5];
   
-//   for (let j = 0; j < qty; j++) {
-//     const toMove = stacks[from].shift();
-//     stacks[to].unshift(toMove);
-//   }
-// }
+  for (let j = 0; j < qty; j++) {
+    const toMove = stacks[from].shift();
+    stacks[to].unshift(toMove);
+  }
+}
 
-// const topCrates = Object.values(stacks).map((stack) => stack[0]).join('');
-// console.log(topCrates)
+const topCrates = Object.values(stacks).map((stack) => stack[0]).join('');
+console.log(topCrates)
 
 // part 2
-const updatedStacks = {...originalStacks};
+const updatedStacks = {};
+numCrates.forEach((stack) => {
+  updatedStacks[stack] = [...originalStacks[stack]];
+})
 
 for (let i = 0; i < steps.length; i++) {
   const move = steps[i];
