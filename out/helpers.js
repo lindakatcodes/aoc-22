@@ -2,7 +2,6 @@ import { readFileSync } from "node:fs";
 // Read and return the input file
 export const readData = async function (filePath) {
     return readFileSync(filePath).toString();
-    // return await fetch(filePath).then((response) => response.text());
 };
 // Splits the input into an array of strings based on new lines
 export const strInput = (data) => data.split("\n");
