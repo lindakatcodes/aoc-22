@@ -18,7 +18,11 @@ function makeFolder(name, parent) {
   }
 }
 
+const instWithMarker = instructions.map((line) => [line, false]);
+
 const rootFolder = makeFolder('/', null);
+instWithMarker[0][1] = true;
+instWithMarker[1][1] = true;
 
 const rootContents = [];
 for (let j = 2; j < instructions.length; j++) {
@@ -48,7 +52,8 @@ if (rootChildFolders.length > 0) {
 
 function processFolder(dir, parentLs) {
   const cmd = `$ cd ${dir.name}`;
-  const dirLs = instructions.indexOf(cmd, parentLs) + 1;
+  const dirLs = instructions.findIndex((line, idx) => line === cmd && instWithMarker[idx][1] === false, parentLs) + 1;
+  instWithMarker[dirLs - 1][1] = true;
 
   const dirContents = [];
   for (let j = dirLs + 1; j < instructions.length; j++) {
@@ -77,7 +82,7 @@ function processFolder(dir, parentLs) {
   }
 }
 
-console.log(rootFolder);
+// console.log(rootFolder);
 
 function calcSize(dir) {
   let size = 0;
@@ -98,6 +103,8 @@ function calcSize(dir) {
 }
 
 calcSize(rootFolder);
+// console.log(rootFolder);
+console.log(directories)
 
 const belowMax = directories.filter((dir) => dir[1] <= MAXSIZE);
 const belowMaxSum = belowMax.reduce((acc, dir) => {
