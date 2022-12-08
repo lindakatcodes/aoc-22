@@ -6,158 +6,101 @@ const readData = async function (filePath) {
 const data = await readData('./inputs/day07input.txt');
 const instructions = data.split("\n");
 
-const folders = [];
 const MAXSIZE = 100000;
-
-const listIndexes = [];
+const directories = [];
 
 function makeFolder(name, parent) {
   return {
     name,
-    size: 0,
     parent,
-    complete: false
+    size: 0,
+    folderContents: []
   }
 }
 
-instructions.forEach((line, index) => {
-    if (line.includes('$ ls')) {
-      listIndexes.push(index);
-    }
+const rootFolder = makeFolder('/', null);
+
+const rootContents = [];
+for (let j = 2; j < instructions.length; j++) {
+  if (instructions[j].includes('$')) {
+    break;
+  }
+  rootContents.push(instructions[j]);
+}
+
+const rootChildFiles = rootContents.filter((type) => !type.includes('dir')).map((val) => val.split(' '));
+const rootChildFolders = rootContents.filter((type) => type.includes('dir')).map((val) => val.split(' ').pop());
+
+if (rootChildFiles.length > 0) {
+  rootChildFiles.map((file) => {
+    const adjFile = [+file[0], file[1]];
+    rootFolder.folderContents.push(adjFile);
   })
+}
 
-  const rootFolder = makeFolder('/', '');
-  folders.push(rootFolder)
-
-  listIndexes.forEach((index) => {
-    // name of current folder
-    const dirToList = instructions[index - 1].split(' ').pop();
-    // get the files in this folder
-    const contents = [];
-    for (let j = index + 1; j < instructions.length; j++) {
-      if (instructions[j].includes('$')) {
-        break;
-      }
-      contents.push(instructions[j]);
-    }
-    // see if any directories exist - if so, make a folder for them with the parent value
-    const childFolders = contents.filter((type) => type.includes('dir')).map((val) => val.split(' ').pop());
-    if (childFolders.length > 0) {
-      childFolders.map((folder) => {
-        const newFolder = makeFolder(folder, dirToList);
-        folders.push(newFolder);
-      })
-    }
+if (rootChildFolders.length > 0) {
+  rootChildFolders.map((folder) => {
+    const newFolder = makeFolder(folder, '/');
+    rootFolder.folderContents.push(newFolder);
+    processFolder(newFolder, 2);
   })
+}
 
-console.log(folders)
+function processFolder(dir, parentLs) {
+  const cmd = `$ cd ${dir.name}`;
+  const dirLs = instructions.indexOf(cmd, parentLs) + 1;
 
+  const dirContents = [];
+  for (let j = dirLs + 1; j < instructions.length; j++) {
+    if (instructions[j].includes('$')) {
+      break;
+    }
+    dirContents.push(instructions[j]);
+  }
 
+  const childFiles = dirContents.filter((type) => !type.includes('dir')).map((val) => val.split(' '));
+  const childFolders = dirContents.filter((type) => type.includes('dir')).map((val) => val.split(' ').pop());
 
+  if (childFiles.length > 0) {
+    childFiles.map((file) => {
+      const adjFile = [+file[0], file[1]];
+      dir.folderContents.push(adjFile);
+    })
+  }
 
+  if (childFolders.length > 0) {
+    childFolders.map((folder) => {
+      const newFolder = makeFolder(folder, dir.name);
+      dir.folderContents.push(newFolder);
+      processFolder(newFolder, dirLs);
+    })
+  }
+}
 
+console.log(rootFolder);
 
+function calcSize(dir) {
+  let size = 0;
+  for (let i = 0; i < dir.folderContents.length; i++) {
+    const item = dir.folderContents[i];
+    if (!item.name) {
+      // file type
+      size += item[0];
+    } else {
+      // dir type
+      const itemSize = calcSize(item);
+      size += itemSize;
+    }
+  }
+  dir.size = size;
+  directories.push([dir.name, size])
+  return size;
+}
 
+calcSize(rootFolder);
 
-
-
-
-
-
-
-// function makeDir() {
-//   return {
-//     name: '',
-//     parent: '',
-//     size: 0,
-//     fileIndexes: [],
-//     dirIndexes: [],
-//     // instIndex: 0
-//   }
-// }
-
-// const directories = [];
-// const listIndexes = [];
-// const MAXSIZE = 100000;
-
-// instructions.forEach((line, index) => {
-//   if (line.includes('$ ls')) {
-//     listIndexes.push(index);
-//   }
-// })
-
-// listIndexes.forEach((index) => {
-//   const dir = instructions[index - 1].split(' ').pop();
-//   const tempDir = new makeDir();
-//   tempDir.name = dir;
-//   // tempDir.instIndex = instructions.indexOf(`dir ${dir}`);
-//   // if (tempDir.instIndex === -1) {
-//   //   tempDir.instIndex = 0;
-//   // }
-
-//   const contents = [];
-//   for (let j = index + 1; j < instructions.length; j++) {
-//     if (instructions[j].includes('$')) {
-//       break;
-//     }
-//     contents.push([instructions[j], j]);
-//   }
-
-//   contents.forEach((piece) => {
-//     if (piece[0].includes('dir')) {
-//       tempDir.dirIndexes.push(piece[1]);
-//     } else {
-//       tempDir.fileIndexes.push(piece[1]);
-//       tempDir.size += Number(piece[0].split(' ').shift());
-//     }
-//   })
-
-//   directories.push(tempDir);
-// })
-
-// function calcFullSize(dir) {
-//   console.log('dir: ', dir)
-//   let total = dir.size;
-//   const childDirs = dir.dirIndexes;
-//   // childDirs
-//   for (let i = 0; i < childDirs.length; i++) {
-//     console.log(childDirs[i])
-//     const next = directories.find((item) => instructions[childDirs[i]].includes(item.name) && item.parent === dir.name);
-//     console.log('next: ', next)
-//     if (next.dirIndexes.length !== 0) {
-//       total += calcFullSize(next);
-//     } else {
-//       total += next.size;
-//     }
-//   }
-//   return total;
-// }
-
-// function findParent(dir) {
-//   const items = dir.dirIndexes.map((index) => instructions[index]);
-//   console.log(items)
-//   const parent = directories.find((item) => item.dirIndexes.includes(dir.instIndex));
-//   // console.log(parent);
-//   if (!parent) {
-//     return ''
-//   }
-//   return parent.name;
-// }
-
-
-// directories.forEach((dir) => dir.parent = findParent(dir))
-// // console.log(directories)
-
-// directories.forEach((dir) => dir.size = calcFullSize(dir));
-
-// console.log(directories)
-
-// let sumAboveMax = 0;
-
-// directories.forEach((dir) => {
-//   if (dir.size < MAXSIZE) {
-//     sumAboveMax += dir.size;
-//   }
-// })
-
-// console.log(sumAboveMax)
+const belowMax = directories.filter((dir) => dir[1] <= MAXSIZE);
+const belowMaxSum = belowMax.reduce((acc, dir) => {
+  return acc + dir[1];
+}, 0)
+console.log(belowMaxSum)
