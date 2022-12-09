@@ -6,6 +6,8 @@ const readData = async function (filePath) {
 const data = await readData('./inputs/day07input.txt');
 const instructions = data.split("\n");
 
+const TOTALSIZE = 70000000;
+const FREESPACE = 30000000;
 const MAXSIZE = 100000;
 const directories = [];
 
@@ -18,6 +20,7 @@ function makeFolder(name, parent) {
   }
 }
 
+// using this to determine if I've already interacted with this folder name
 const instWithMarker = instructions.map((line) => [line, false]);
 
 const rootFolder = makeFolder('/', null);
@@ -50,6 +53,7 @@ if (rootChildFolders.length > 0) {
   })
 }
 
+// takes in a directory and it's parent listing index; fills the folder contents, and processes any children folders
 function processFolder(dir, parentLs) {
   const cmd = `$ cd ${dir.name}`;
   const dirLs = instructions.findIndex((line, idx) => line === cmd && instWithMarker[idx][1] === false, parentLs) + 1;
@@ -82,8 +86,7 @@ function processFolder(dir, parentLs) {
   }
 }
 
-// console.log(rootFolder);
-
+// counts the full size of a given directory
 function calcSize(dir) {
   let size = 0;
   for (let i = 0; i < dir.folderContents.length; i++) {
@@ -102,12 +105,19 @@ function calcSize(dir) {
   return size;
 }
 
+// calling it once on the root recursively lets it be called on all the inner folders
 calcSize(rootFolder);
-// console.log(rootFolder);
-console.log(directories)
 
+// part 1
 const belowMax = directories.filter((dir) => dir[1] <= MAXSIZE);
 const belowMaxSum = belowMax.reduce((acc, dir) => {
   return acc + dir[1];
 }, 0)
 console.log(belowMaxSum)
+
+// part 2
+const available = TOTALSIZE - rootFolder.size;
+const sizeNeeded = FREESPACE - available;
+const potentials = directories.filter((dir) => dir[1] > sizeNeeded);
+potentials.sort((a, b) => a[1] - b[1]);
+console.log(potentials[0]);
