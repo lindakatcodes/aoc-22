@@ -30,30 +30,33 @@ function Monkey(monkey) {
       }
     },
     calcTest(n) {
-      return `${n} % ${this.testVal}` === 0 ? true : false;
+      return Number.isInteger(n / +this.testVal) ? true : false;
     }
   }
 }
 
 let currentRound = 1;
-let maxRounds = 1;
+let maxRounds = 20;
 const monkeys = [];
 
+// build monkey objects
 for (let i = 0; i < monkeysData.length; i++) {
   const monkeyLines = monkeysData[i].split('\n');
   const mitems = monkeyLines[1].split(': ').pop().split(', ').map((item) => +item);
   const mop = monkeyLines[2].split('new = ').pop();
-  const test = monkeyLines[3].split(': ').pop();
+  const test = monkeyLines[3].split('Test: divisible by ').pop();
   const ttrue = Number(monkeyLines[4].split(' ').pop());
   const tfalse = Number(monkeyLines[5].split(' ').pop());
   const monkey = Monkey([i, mitems, mop, test, ttrue, tfalse]);
   monkeys.push(monkey);
 }
 
+// part 1
 for (let i = 0; i < maxRounds; i++) {
   monkeys.forEach((monkey) => {
     while (monkey.items.length > 0) {
       const item = monkey.items.shift();
+      monkey.totalInspected++;
       const addWorry = monkey.calcOp(item);
       const lowerWorry = Math.floor(addWorry / 3);
       const testResult = monkey.calcTest(lowerWorry);
@@ -62,4 +65,6 @@ for (let i = 0; i < maxRounds; i++) {
   })
 }
 
-console.log(monkeys)
+const monkeyActivity = monkeys.map((monkey) => monkey.totalInspected).sort((a, b) => b - a);
+const monkeyBusiness = monkeyActivity[0] * monkeyActivity[1];
+console.log(monkeyBusiness);
