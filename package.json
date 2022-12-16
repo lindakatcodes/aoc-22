@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "setup": "cargo run",
-    "check": "ts-node-esm solutions/day13.js",
-    "debug": "node --loader ts-node/esm --inspect-brk solutions/day13.js"
+    "check": "ts-node-esm solutions/day$DAY.js",
+    "debug": "node --loader ts-node/esm --inspect-brk solutions/day$DAY.js"
   },
   "repository": {
     "type": "git",
