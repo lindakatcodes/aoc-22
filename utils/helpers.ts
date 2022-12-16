@@ -65,6 +65,10 @@ export function factorial(n: number): number {
   return n * factorial(n - 1);
 }
 
+export function manhattanDistance(a: number[], b: number[]): number {
+  return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
+}
+
 // def heuristic(a, b):
 //    # Manhattan distance on a square grid
 //    return abs(a.x - b.x) + abs(a.y - b.y)
